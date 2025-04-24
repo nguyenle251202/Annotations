@@ -6,7 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Range {
-    int minAge = 0;
-    int maxAge = 100;
+    int minAge();
+
+    int maxAge();
+
     String message() default ("Valid age is between 0-100. Please check again.");
 }

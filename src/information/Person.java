@@ -15,11 +15,15 @@ public class Person {
     private String Name;
 
     @Email
+    @NotNull
     private String Email;
 
+    @Range(minAge = 0, maxAge = 100)
     private int Age;
 
-    @Future @Past
+    @Future
+    @Past
+    @NotNull
     private String Birthday;
 
     // Contructor -----------------------------------------------

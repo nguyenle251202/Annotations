@@ -1,9 +1,6 @@
 package core;
 
-import annotations.Email;
-import annotations.Future;
-import annotations.NotNull;
-import annotations.Past;
+import annotations.*;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -31,7 +28,7 @@ public class Validator {
                     System.out.println("Cannot access field: " + field.getName());
                 }
             }
-            
+
             // Email
             if (field.isAnnotationPresent(Email.class)) {
                 Email emailAnnotation = field.getAnnotation(Email.class);
@@ -69,15 +66,15 @@ public class Validator {
                         } else {
                             if (LocalDate.parse(strValue).isAfter(LocalDate.now())) {
                                 System.out.println("Field '" + field.getName() + "' is in the future");
-                            } else {
-                                System.out.println("Field '" + field.getName() + "' valid.");
-                        }
+                            }
                         }
                     }
                 } catch (IllegalAccessException | PatternSyntaxException e) {
                     System.out.println("Cannot access field: " + field.getName());
                 }
             }
+
+            // Past
             if (field.isAnnotationPresent(Past.class)) {
                 Past pastAnnotation = field.getAnnotation(Past.class);
                 String message = pastAnnotation.message();
@@ -98,6 +95,26 @@ public class Validator {
                         }
                     }
                 } catch (IllegalAccessException | PatternSyntaxException e) {
+                    System.out.println("Cannot access field: " + field.getName());
+                }
+            }
+
+            // Range
+            if (field.isAnnotationPresent(Range.class)) {
+                Range rangeAnnotation = field.getAnnotation(Range.class);
+                int minAge = rangeAnnotation.minAge();
+                int maxAge = rangeAnnotation.maxAge();
+                String message = rangeAnnotation.message();
+                try {
+                    Object value = field.get(obj);
+                    if (value instanceof Integer intValue) {
+                        if (intValue < minAge || intValue > maxAge) {
+                            System.out.println("Field '" + field.getName() + "' Age is not valid");
+                        }
+                    } else {
+                        System.out.println("Field '" + field.getName() + "' is Valid");
+                    }
+                } catch (Exception e) {
                     System.out.println("Cannot access field: " + field.getName());
                 }
             }
