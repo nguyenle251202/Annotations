@@ -3,6 +3,7 @@ package core;
 import annotations.Email;
 import annotations.Future;
 import annotations.NotNull;
+import annotations.Past;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -71,6 +72,29 @@ public class Validator {
                             } else {
                                 System.out.println("Field '" + field.getName() + "' valid.");
                         }
+                        }
+                    }
+                } catch (IllegalAccessException | PatternSyntaxException e) {
+                    System.out.println("Cannot access field: " + field.getName());
+                }
+            }
+            if (field.isAnnotationPresent(Past.class)) {
+                Past pastAnnotation = field.getAnnotation(Past.class);
+                String message = pastAnnotation.message();
+                String regex = pastAnnotation.regexp();
+                try {
+                    Object value = field.get(obj);
+                    if (value instanceof String strValue) {
+                        java.util.regex.Pattern pattern = java.util.regex.Pattern.compile(regex);
+                        Matcher matcher = pattern.matcher(strValue);
+                        if (!matcher.matches()) {
+                            System.out.println("Field '" + field.getName() + "' regex not match");
+                        } else {
+                            if (LocalDate.parse(strValue).isBefore(LocalDate.now())) {
+                                System.out.println("Field '" + field.getName() + "' is in the past");
+                            } else {
+                                System.out.println("Field '" + field.getName() + "' valid.");
+                            }
                         }
                     }
                 } catch (IllegalAccessException | PatternSyntaxException e) {

@@ -19,7 +19,7 @@ public class Person {
 
     private int Age;
 
-    @Future
+    @Future @Past
     private String Birthday;
 
     // Contructor -----------------------------------------------
