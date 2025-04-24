@@ -22,7 +22,7 @@ public class Validator {
                     if (value == null || (value instanceof String && ((String) value).trim().isEmpty())) {
                         System.out.println("Field '" + field.getName() + "' must NOT be null!");
                     } else {
-                        System.out.println("Field '" + field.getName() + "' is valid");
+                        System.out.println("Field '" + field.getName() + "' NotNull is valid");
                     }
                 } catch (IllegalAccessException e) {
                     System.out.println("Cannot access field: " + field.getName());
@@ -43,7 +43,7 @@ public class Validator {
                         if (!matcher.matches()) {
                             System.out.println("Field '" + field.getName() + "' regex not match: " + regex);
                         } else {
-                            System.out.println("Field '" + field.getName() + "' valid.");
+                            System.out.println("Field '" + field.getName() + "' Email is valid.");
                         }
                     }
                 } catch (IllegalAccessException | PatternSyntaxException e) {
@@ -90,7 +90,7 @@ public class Validator {
                             if (LocalDate.parse(strValue).isBefore(LocalDate.now())) {
                                 System.out.println("Field '" + field.getName() + "' is in the past");
                             } else {
-                                System.out.println("Field '" + field.getName() + "' valid.");
+                                System.out.println("Field '" + field.getName() + "' Past is valid.");
                             }
                         }
                     }
@@ -110,9 +110,29 @@ public class Validator {
                     if (value instanceof Integer intValue) {
                         if (intValue < minAge || intValue > maxAge) {
                             System.out.println("Field '" + field.getName() + "' Age is not valid");
+                        } else {
+                            System.out.println("Field '" + field.getName() + "' Range is Valid");
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println("Cannot access field: " + field.getName());
+                }
+            }
+
+            // Length
+            if (field.isAnnotationPresent(Length.class)) {
+                Length lengthAnnotation = field.getAnnotation(Length.class);
+                int minLength = lengthAnnotation.minLength();
+                int maxLength = lengthAnnotation.maxLength();
+                String message = lengthAnnotation.message();
+                try {
+                    Object value = field.get(obj);
+                    if (value instanceof String strValue) {
+                        if (strValue.length() < minLength || strValue.length() > maxLength) {
+                            System.out.println("Field '" + field.getName() + "' Length is not valid");
                         }
                     } else {
-                        System.out.println("Field '" + field.getName() + "' is Valid");
+                        System.out.println("Field '" + field.getName() + "' Length is Valid");
                     }
                 } catch (Exception e) {
                     System.out.println("Cannot access field: " + field.getName());

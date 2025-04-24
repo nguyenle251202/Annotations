@@ -12,6 +12,7 @@ public class Person {
     private Timestamp timestamp;
 
     @NotNull
+    @Length(minLength = 10, maxLength = 25)
     private String Name;
 
     @Email
@@ -32,9 +33,6 @@ public class Person {
         Email = email;
         Age = calculateAge(birthday);
         Birthday = birthday;
-    }
-
-    public Person(String birthday) {
     }
     // -----------------------------------------------------------
 
@@ -80,7 +78,9 @@ public class Person {
     }
 
     // -----------------------------------------------------------
+
     // Age Calculation -------------------------------------------
+    @ValidateMethod
     private int calculateAge(String birthdayStr) {
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
