@@ -1,3 +1,4 @@
+import annotations.ValidateMethod;
 import core.Validator;
 import information.Person;
 
@@ -6,6 +7,7 @@ import java.util.Scanner;
 //import static information.View.people;
 
 public class Main {
+    @ValidateMethod
     public static void addPerson() throws IllegalAccessException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("");
